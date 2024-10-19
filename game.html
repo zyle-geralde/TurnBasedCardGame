@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            .char1{
+                height: 400px; margin-right: 40px; border-style: solid; border-width: 5px; 
+                border-color: white; border-radius: 10px; cursor: pointer; transition: 0.2s;
+            }
+            .char2{
+                height: 400px; margin-right: 40px; border-style: solid; border-width: 5px; 
+                border-color: white; border-radius: 10px; cursor: pointer; transition: 0.2s
+            }
+            .char3{
+                height: 400px; border-style: solid; border-width: 5px; 
+                border-color: white; border-radius: 10px; cursor: pointer; transition: 0.2s
+            }
+
+            .char1:hover{
+                height: 450px;
+            }
+            .char2:hover{
+                height: 450px;
+            }
+            .char3:hover{
+                height: 450px;
+            }
+        </style>
+    </head>
+    <body style="background:url(mountains-7728691_1280.png); height:100vh;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+            <div style="background-color: rgb(43, 0, 130); font-size: 30px; color: white; font-family: Helvetica; padding: 30px 25px;
+            border-style: double; border-radius: 20px; border-width: 10px; margin-bottom: 10px;">
+                CHOOSE A CHARACTER
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <img src="eevee-8024841_1280.jpg"  class = "char1">
+                <img src="raichu-8012701_1280.jpg"  class = "char2">
+                <img src = "squirtle-8012702_1280.jpg"  class = "char3">
+            </div>
+        </div>
+
+    </body>
+    <script>
+        localStorage.setItem("state",0)
+        localStorage.removeItem("hp")
+        localStorage.removeItem("playerhp")
+        localStorage.removeItem("comhp")
+        function computeState(state,input){
+            switch(parseInt(state)){
+                case 0:
+                    if(input == "c1"){
+                        localStorage.setItem("state",1)
+                        localStorage.setItem("char","eevee-8024841_1280.jpg")
+                        localStorage.setItem("playerStat",JSON.stringify({"hp":100,"attack":50,"heal":25}))
+                        localStorage.setItem("porig",100)
+                        console.log(localStorage)
+
+                        var charlist = ["eevee-8024841_1280.jpg","raichu-8012701_1280.jpg","squirtle-8012702_1280.jpg"]
+                        enemychar = "eevee-8024841_1280.jpg"
+
+                        while(localStorage.getItem("char") == enemychar){
+                            let randomNumber = Math.floor(Math.random() * 3)
+                            enemychar = charlist[randomNumber]
+                            localStorage.setItem("enemy",enemychar)
+                            if(enemychar == charlist[0]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":50,"heal":25}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[1]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":25,"heal":50}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[2]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":150,"attack":25,"heal":25}))
+                                localStorage.setItem("corig",150)
+                            }
+                        }
+                        window.location.href = "../TurnBasedGame/match.html"
+                    }
+                    else if(input == "c2"){
+                        localStorage.setItem("state",1)
+                        localStorage.setItem("char","raichu-8012701_1280.jpg")
+                        localStorage.setItem("playerStat",JSON.stringify({"hp":100,"attack":25,"heal":50}))
+                        localStorage.setItem("porig",100)
+                        console.log(localStorage)
+
+                        var charlist = ["eevee-8024841_1280.jpg","raichu-8012701_1280.jpg","squirtle-8012702_1280.jpg"]
+                        enemychar = "raichu-8012701_1280.jpg"
+
+                        while(localStorage.getItem("char") == enemychar){
+                            let randomNumber = Math.floor(Math.random() * 3)
+                            enemychar = charlist[randomNumber]
+                            localStorage.setItem("enemy",enemychar)
+
+                            if(enemychar == charlist[0]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":50,"heal":25}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[1]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":25,"heal":50}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[2]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":150,"attack":25,"heal":25}))
+                                localStorage.setItem("corig",150)
+                            }
+                        }
+
+                        window.location.href = "../TurnBasedGame/match.html"
+                    }
+                    else if(input == "c3"){
+                        localStorage.setItem("state",1)
+                        localStorage.setItem("char","squirtle-8012702_1280.jpg")
+                        localStorage.setItem("playerStat",JSON.stringify({"hp":150,"attack":25,"heal":25}))
+                        localStorage.setItem("porig",150)
+                        console.log(localStorage)
+
+                        var charlist = ["eevee-8024841_1280.jpg","raichu-8012701_1280.jpg","squirtle-8012702_1280.jpg"]
+                        enemychar = "squirtle-8012702_1280.jpg"
+
+                        while(localStorage.getItem("char") == enemychar){
+                            let randomNumber = Math.floor(Math.random() * 3)
+                            enemychar = charlist[randomNumber]
+                            localStorage.setItem("enemy",enemychar)
+
+                            if(enemychar == charlist[0]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":50,"heal":25}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[1]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":100,"attack":25,"heal":50}))
+                                localStorage.setItem("corig",100)
+                            }
+                            else if(enemychar == charlist[2]){
+                                localStorage.setItem("comStat",JSON.stringify({"hp":150,"attack":25,"heal":25}))
+                                localStorage.setItem("corig",150)
+                            }
+                        }
+
+                        window.location.href = "../TurnBasedGame/match.html"
+                    }
+                    else{
+                        console.log(localStorage)
+                    }
+                    break
+                case 1:
+
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+            }
+        }
+        $(document).ready(function(e){
+            localStorage.setItem("ptally",0)
+            localStorage.setItem("ctally",0)
+            $(".char1").click(function(e){
+                computeState(localStorage.getItem("state"),"c1")
+            })
+            $(".char2").click(function(e){
+                computeState(localStorage.getItem("state"),"c2")
+            })
+            $(".char3").click(function(e){
+                computeState(localStorage.getItem("state"),"c3")
+            })
+        })
+
+    </script>
+</html>

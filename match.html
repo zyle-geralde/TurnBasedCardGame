@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .playerImg {
+            height: 400px;
+            border-style: solid;
+            border-width: 5px;
+            border-color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            animation-duration: 1s;
+        }
+
+        .enemyImg {
+            height: 400px;
+            border-style: solid;
+            border-width: 5px;
+            border-color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            animation-duration: 1s;
+        }
+
+        .attackPlayer {
+            background-color: rgb(43, 0, 130);
+            font-size: 30px;
+            color: white;
+            font-family: Helvetica;
+            height: 70px;
+            width: 100px;
+            border-style: double;
+            border-radius: 20px;
+            border-width: 10px;
+            margin-bottom: 10px;
+            margin-right: 70px;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .healPlayer {
+            background-color: rgb(43, 0, 130);
+            font-size: 30px;
+            color: white;
+            font-family: Helvetica;
+            height: 70px;
+            border-style: double;
+            border-radius: 20px;
+            border-width: 10px;
+            margin-bottom: 10px;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            cursor: pointer;
+        }
+
+        .attackPlayer:hover {
+            width: 110px;
+            height: 80px;
+        }
+
+        .healPlayer:hover {
+            width: 110px;
+            height: 80px;
+        }
+
+        .playDiv {
+            animation-duration: 1s;
+            background-color: rgb(235, 235, 235);
+            margin-right: 150px;
+            height: 410px;
+            border-radius: 10px;
+            margin-left: 150px;
+        }
+
+        .enemyDiv {
+            animation-duration: 1s;
+            background-color: rgb(255, 67, 67);
+            margin-right: 150px;
+            height: 410px;
+            border-radius: 10px;
+        }
+        .bringDown{
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            background-color: black;
+            opacity: 0.7;
+            display: flex;
+            flex-direction: column;
+        }
+        .mainGame{
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes hitAnimation {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes playerAttackAnim {
+            0% {
+                transform: translate(0, 0);
+                z-index: 1;
+            }
+
+            40% {
+                transform: translate(700px, 0);
+                z-index: 100
+            }
+
+            100% {
+                transform: translate(0, 0);
+                z-index: 1;
+            }
+        }
+
+        @keyframes enemyAttackAnim {
+            0% {
+                transform: translate(0, 0);
+                z-index: 1;
+            }
+
+            40% {
+                transform: translate(-700px, 0);
+                z-index: 100
+            }
+
+            100% {
+                transform: translate(0, 0);
+                z-index: 1;
+            }
+        }
+    </style>
+</head>
+
+<body style="background: url(mountains-7728691_1280.png); font-family: Helvetica;">
+    <div class = "bringDown" style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div style="font-size: 150px; color: white;" class = "endTitle">YOU WIN</div>
+
+            <div class = backBut style="background-color: white; font-size: 30px; font-weight: bold; padding: 30px 50px;
+            border-radius: 10px; cursor: pointer; margin-top: 100px;">Back</div>
+        </div>
+    </div>
+    <div class = mainGame>
+        <div style="font-size: 30px; font-weight: bold; color: white; margin-left: 100px;" class = backHome>&larr;</div>
+        <div style="display: flex; flex-direction: row; justify-content: center; font-size: 50px; font-weight: bold; color: white;
+            border-radius: 10px; margin-top: 30px;" class="TurnMe">Player Turn</div>
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; flex-direction: row; color: white; font-size: 30px;">
+                    <div>HP: </div>
+                    <div class="playerHp">100</div>
+                </div>
+                <div class="playDiv">
+                    <img class="playerImg">
+                </div>
+            </div>
+            <div style="margin-left: -60px;">
+                <div style="display: flex; flex-direction: row; margin-bottom: 30px;">
+                    <div class="pTally" style="color: white; font-size: 180px; margin-right: 150px;margin-left: -90px;">
+                        0
+                    </div>
+                    <div class="cTally" style="color: white; font-size: 180px;">
+                        0
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: center; font-size: 70px; 
+                color: white; margin-left: -60px; font-weight: bold;" class="rTally">ROUND 1</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: row; color: white; font-size: 30px; margin-left: 50px;">
+                    <div>HP: </div>
+                    <div class="compHp">100</div>
+                </div>
+                <div class="enemyDiv">
+                    <img class="enemyImg">
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 10px;">
+            <div class=attackPlayer>
+                Attack
+            </div>
+            <div class=healPlayer>
+                Heal
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function computeState(state, input) {
+        switch (parseInt(state)) {
+            case 0:
+                if (input == "c1") {
+                    localStorage.setItem("state", 1)
+                    localStorage.setItem("char", "eevee-8024841_1280.jpg")
+                    localStorage.setItem("playerhp", 100)
+                    console.log(localStorage)
+
+                    var charlist = ["eevee-8024841_1280.jpg", "raichu-8012701_1280.jpg", "squirtle-8012702_1280.jpg"]
+                    enemychar = "eevee-8024841_1280.jpg"
+
+                    while (localStorage.getItem("char") == enemychar) {
+                        let randomNumber = Math.floor(Math.random() * 3)
+                        enemychar = charlist[randomNumber]
+                        localStorage.setItem("enemy", enemychar)
+                        if (enemychar == charlist[0]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[1]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[2]) {
+                            localStorage.setItem("comhp", 150)
+                        }
+                    }
+                    window.location.href = "../TurnBasedGame/match.html"
+                }
+                else if (input == "c2") {
+                    localStorage.setItem("state", 1)
+                    localStorage.setItem("char", "raichu-8012701_1280.jpg")
+                    localStorage.setItem("playerhp", 100)
+                    console.log(localStorage)
+
+                    var charlist = ["eevee-8024841_1280.jpg", "raichu-8012701_1280.jpg", "squirtle-8012702_1280.jpg"]
+                    enemychar = "raichu-8012701_1280.jpg"
+
+                    while (localStorage.getItem("char") == enemychar) {
+                        let randomNumber = Math.floor(Math.random() * 3)
+                        enemychar = charlist[randomNumber]
+                        localStorage.setItem("enemy", enemychar)
+
+                        if (enemychar == charlist[0]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[1]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[2]) {
+                            localStorage.setItem("comhp", 150)
+                        }
+                    }
+
+                    window.location.href = "../TurnBasedGame/match.html"
+                }
+                else if (input == "c3") {
+                    localStorage.setItem("state", 1)
+                    localStorage.setItem("char", "squirtle-8012702_1280.jpg")
+                    localStorage.setItem("playerhp", 150)
+                    console.log(localStorage)
+
+                    var charlist = ["eevee-8024841_1280.jpg", "raichu-8012701_1280.jpg", "squirtle-8012702_1280.jpg"]
+                    enemychar = "squirtle-8012702_1280.jpg"
+
+                    while (localStorage.getItem("char") == enemychar) {
+                        let randomNumber = Math.floor(Math.random() * 3)
+                        enemychar = charlist[randomNumber]
+                        localStorage.setItem("enemy", enemychar)
+
+                        if (enemychar == charlist[0]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[1]) {
+                            localStorage.setItem("comhp", 100)
+                        }
+                        else if (enemychar == charlist[2]) {
+                            localStorage.setItem("comhp", 150)
+                        }
+                    }
+
+                    window.location.href = "../TurnBasedGame/match.html"
+                }
+                else {
+                    console.log(localStorage)
+                }
+                break
+            case 1:
+                if (input == "p1") {
+                    var attackme = (JSON.parse(localStorage.getItem("playerStat"))).attack
+                    let randomNumber = Math.floor(Math.random() * attackme) + 1;
+                    console.log(randomNumber)
+
+                    var animatedBox = document.querySelector(".enemyImg")
+
+                    animatedBox.style.animationName = 'hitAnimation'
+                    var enemyDiv = document.querySelector(".enemyDiv")
+                    enemyDiv.style.backgroundColor = "rgb(255, 67, 67)"
+
+                    animatedBox.addEventListener('animationend', function () {
+                        animatedBox.style.animationName = ""
+                    });
+
+                    var comStat = JSON.parse(localStorage.getItem("comStat"))
+                    comStat.hp -= randomNumber
+                    localStorage.setItem("comStat", JSON.stringify(comStat))
+
+                    if ((JSON.parse(localStorage.getItem("comStat"))).hp < 0) {
+                        var comStat = JSON.parse(localStorage.getItem("comStat"))
+                        comStat.hp = 0
+                        localStorage.setItem("comStat", JSON.stringify(comStat))
+                    }
+
+                    $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+
+                    console.log(localStorage)
+
+                    var animatedBox2 = document.querySelector(".playDiv")
+                    animatedBox2.style.animationName = 'playerAttackAnim'
+
+                    animatedBox2.addEventListener('animationend', function () {
+                        animatedBox2.style.animationName = ""
+                    });
+
+
+                    //localStorage.setItem("state",2)
+
+                }
+                else if (input == "p2") {
+
+                    var healme = (JSON.parse(localStorage.getItem("playerStat"))).heal
+                    let randomNumber = Math.floor(Math.random() * healme) + 1;
+                    console.log(randomNumber)
+
+                    var healhp = randomNumber + parseInt($(".playerHp").text())
+
+                    if (healhp > parseInt(localStorage.getItem("porig"))) {
+                        var realHp = JSON.parse(localStorage.getItem("playerStat"))
+                        realHp.hp = parseInt(localStorage.getItem("porig"))
+                        localStorage.setItem("playerStat", JSON.stringify(realHp))
+                        $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+                        console.log(localStorage)
+                    }
+                    else {
+                        var realHp = JSON.parse(localStorage.getItem("playerStat"))
+                        realHp.hp = healhp
+                        localStorage.setItem("playerStat", JSON.stringify(realHp))
+                        $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+                        console.log(localStorage)
+                    }
+
+
+                    var animatedBox = document.querySelector(".playerImg")
+                    var playDiv = document.querySelector(".playDiv")
+                    playDiv.style.backgroundColor = "rgb(235, 235, 235)"
+
+                    animatedBox.style.animationName = 'hitAnimation'
+
+                    animatedBox.addEventListener('animationend', function () {
+                        animatedBox.style.animationName = ""
+                    });
+                }
+                else if(input == "g"){
+                    window.location.href = "../TurnBasedGame/game.html"
+                }
+
+                localStorage.setItem("state", 2)
+                var charchange = ""
+
+                if ((JSON.parse(localStorage.getItem("comStat"))).hp > 0) {
+                    charchange = "l"
+                }
+                else {
+                    charchange = "w"
+                }
+
+                setTimeout(function () {
+                    $(".TurnMe").text("Computer Turn")
+                }, 1000)
+
+                computeState(parseInt(localStorage.getItem("state")), charchange)
+
+                break;
+
+            case 2:
+                if (input == "l") {
+                    let randomNumber = Math.floor(Math.random() * 2) + 1;
+
+                    var ranP = ""
+                    if (randomNumber == 1) {
+                        ranP = "e1"
+                    }
+                    else {
+                        ranP = "e2"
+                    }
+                    localStorage.setItem("state", 3)
+                    computeState(parseInt(localStorage.getItem("state")), ranP)
+                }
+                else if (input == "w") {
+                    var ptally = localStorage.getItem("ptally")
+                    localStorage.setItem("ptally", parseInt(ptally) + 1)
+
+                    var ptallycomp = parseInt(localStorage.getItem("ptally"))
+                    var ctallycomp = parseInt(localStorage.getItem("ctally"))
+
+                    var ttme = document.querySelector(".TurnMe")
+                    ttme.style.opacity = 0
+
+                    if ((ptallycomp == 2 && ctallycomp == 0) || (ptallycomp == 2 && ctallycomp == 1)) {
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        attackPlayer.style.opacity = 0
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+                        healPlayer.style.opacity = 0
+
+                        localStorage.setItem("state", 5)
+
+                        var ttme = document.querySelector(".TurnMe")
+                        ttme.style.opacity = 0
+                        $(".pTally").text(localStorage.getItem("ptally"))
+                        $(".cTally").text(localStorage.getItem("ctally"))
+
+                        computeState(parseInt(localStorage.getItem("state")), "b")
+                    }
+                    else if ((ptallycomp == 0 && ctallycomp == 2) || (ptallycomp == 1 && ctallycomp == 2)) {
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        attackPlayer.style.opacity = 0
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+                        healPlayer.style.opacity = 0
+
+                        localStorage.setItem("state", 5)
+
+                        var ttme = document.querySelector(".TurnMe")
+                        ttme.style.opacity = 0
+                        $(".pTally").text(localStorage.getItem("ptally"))
+                        $(".cTally").text(localStorage.getItem("ctally"))
+
+                        computeState(parseInt(localStorage.getItem("state")), "a")
+                    }
+                    else {
+                        localStorage.setItem("state", 1)
+
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+
+                        setTimeout(function () {
+                            var ttme = document.querySelector(".TurnMe")
+                            ttme.style.opacity = 0
+                            $(".pTally").text(localStorage.getItem("ptally"))
+                            $(".cTally").text(localStorage.getItem("ctally"))
+
+                            var newComStat = JSON.parse(localStorage.getItem("comStat"))
+                            newComStat.hp = localStorage.getItem("corig")
+
+                            var newPlayerStat = JSON.parse(localStorage.getItem("playerStat"))
+                            newPlayerStat.hp = localStorage.getItem("porig")
+
+                            localStorage.setItem("playerStat", JSON.stringify(newPlayerStat))
+                            localStorage.setItem("comStat", JSON.stringify(newComStat))
+
+                            $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+                            $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+
+                            if ($(".rTally").text() == "ROUND 1") {
+                                $(".rTally").text("ROUND 2")
+                            }
+                            else if ($(".rTally").text() == "ROUND 2") {
+                                $(".rTally").text("ROUND 3")
+                            }
+                        }, 2000)
+
+                        setTimeout(function () {
+                            var ttme = document.querySelector(".TurnMe")
+                            ttme.style.opacity = 1
+                            var attackPlayer = document.querySelector(".attackPlayer")
+                            attackPlayer.style.display = "flex"
+                            var healPlayer = document.querySelector(".healPlayer")
+                            healPlayer.style.display = "flex"
+
+                            $(".TurnMe").text("Player Turn")
+                        }, 4000)
+                    }
+                }
+                else if(input == "g"){
+                    window.location.href = "../TurnBasedGame/game.html"
+                }
+
+                break;
+
+            case 3:
+                var attackPlayer = document.querySelector(".attackPlayer")
+                attackPlayer.style.display = "none"
+                var healPlayer = document.querySelector(".healPlayer")
+                healPlayer.style.display = "none"
+                setTimeout(function () {
+                    if (input == "e1") {
+                        var attackme = (JSON.parse(localStorage.getItem("comStat"))).attack
+                        let randomNumber = Math.floor(Math.random() * attackme) + 1;
+                        console.log(randomNumber)
+
+                        var animatedBox = document.querySelector(".playerImg")
+
+                        animatedBox.style.animationName = 'hitAnimation'
+
+                        var playerDiv = document.querySelector(".playDiv")
+                        playerDiv.style.backgroundColor = "rgb(255, 67, 67)"
+
+                        animatedBox.addEventListener('animationend', function () {
+                            animatedBox.style.animationName = ""
+                        });
+
+                        var comStat = JSON.parse(localStorage.getItem("playerStat"))
+                        comStat.hp -= randomNumber
+                        localStorage.setItem("playerStat", JSON.stringify(comStat))
+
+                        if ((JSON.parse(localStorage.getItem("playerStat"))).hp < 0) {
+                            var comStat = JSON.parse(localStorage.getItem("playerStat"))
+                            comStat.hp = 0
+                            localStorage.setItem("playerStat", JSON.stringify(comStat))
+                        }
+
+                        $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+
+                        console.log(localStorage)
+
+                        var animatedBox2 = document.querySelector(".enemyDiv")
+                        animatedBox2.style.animationName = 'enemyAttackAnim'
+
+                        animatedBox2.addEventListener('animationend', function () {
+                            animatedBox2.style.animationName = ""
+                        });
+
+
+                        //localStorage.setItem("state",2)
+
+                    }
+                    else if (input == "e2") {
+
+                        var healme = (JSON.parse(localStorage.getItem("comStat"))).heal
+                        let randomNumber = Math.floor(Math.random() * healme) + 1;
+                        console.log(randomNumber)
+
+                        var healhp = randomNumber + parseInt($(".compHp").text())
+
+                        if (healhp > parseInt(localStorage.getItem("corig"))) {
+                            var realHp = JSON.parse(localStorage.getItem("comStat"))
+                            realHp.hp = parseInt(localStorage.getItem("corig"))
+                            localStorage.setItem("comStat", JSON.stringify(realHp))
+                            $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+                            console.log(localStorage)
+                        }
+                        else {
+                            var realHp = JSON.parse(localStorage.getItem("comStat"))
+                            realHp.hp = healhp
+                            localStorage.setItem("comStat", JSON.stringify(realHp))
+                            $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+                            console.log(localStorage)
+                        }
+
+
+                        var animatedBox = document.querySelector(".enemyImg")
+
+                        animatedBox.style.animationName = 'hitAnimation'
+                        var enemyDiv = document.querySelector(".enemyDiv")
+                        enemyDiv.style.backgroundColor = "rgb(235, 235, 235)"
+
+                        animatedBox.addEventListener('animationend', function () {
+                            animatedBox.style.animationName = ""
+                        });
+                    }
+                    else if(input == "g"){
+                        window.location.href = "../TurnBasedGame/game.html"
+                    }
+
+                    localStorage.setItem("state", 4)
+                    var charchange = ""
+
+                    if ((JSON.parse(localStorage.getItem("playerStat"))).hp > 0) {
+                        charchange = "lc"
+                    }
+                    else {
+                        charchange = "wc"
+                    }
+
+                    computeState(parseInt(localStorage.getItem("state")), charchange)
+
+                    setTimeout(function () {
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "flex"
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "flex"
+
+                        $(".TurnMe").text("Player Turn")
+                    }, 1000)
+
+
+
+                }, 2000);
+
+
+                break;
+
+            case 4:
+                if (input == "lc") {
+
+                    localStorage.setItem("state", 1)
+                    break;
+                }
+                else if (input == "wc") {
+                    var ptally = localStorage.getItem("ctally")
+                    localStorage.setItem("ctally", parseInt(ptally) + 1)
+
+                    var ptallycomp = parseInt(localStorage.getItem("ptally"))
+                    var ctallycomp = parseInt(localStorage.getItem("ctally"))
+
+                    var ttme = document.querySelector(".TurnMe")
+                    ttme.style.opacity = 0
+
+                    if ((ptallycomp == 2 && ctallycomp == 0) || (ptallycomp == 2 && ctallycomp == 1)) {
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        attackPlayer.style.opacity = 0
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+                        healPlayer.style.opacity = 0
+
+                        localStorage.setItem("state", 5)
+
+                        var ttme = document.querySelector(".TurnMe")
+                        ttme.style.opacity = 0
+                        $(".pTally").text(localStorage.getItem("ptally"))
+                        $(".cTally").text(localStorage.getItem("ctally"))
+                        if ($(".rtally").text() == "ROUND 1") {
+                            $(".rtally").text("ROUND 2")
+                        }
+                        else if ($(".rtally").text() == "ROUND 2") {
+                            $(".rtally").text("ROUND 3")
+                        }
+
+                        computeState(parseInt(localStorage.getItem("state")), "b")
+                    }
+                    else if ((ptallycomp == 0 && ctallycomp == 2) || (ptallycomp == 1 && ctallycomp == 2)) {
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        attackPlayer.style.opacity = 0
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+                        healPlayer.style.opacity = 0
+
+                        localStorage.setItem("state", 5)
+
+                        var ttme = document.querySelector(".TurnMe")
+                        ttme.style.opacity = 0
+                        $(".pTally").text(localStorage.getItem("ptally"))
+                        $(".cTally").text(localStorage.getItem("ctally"))
+                        if ($(".rtally").text() == "ROUND 1") {
+                            $(".rtally").text("ROUND 2")
+                        }
+                        else if ($(".rtally").text() == "ROUND 2") {
+                            $(".rtally").text("ROUND 3")
+                        }
+
+                        computeState(parseInt(localStorage.getItem("state")), "a")
+                    }
+                    else {
+                        localStorage.setItem("state", 1)
+
+                        var attackPlayer = document.querySelector(".attackPlayer")
+                        attackPlayer.style.display = "none"
+                        attackPlayer.style.opacity = 0
+                        var healPlayer = document.querySelector(".healPlayer")
+                        healPlayer.style.display = "none"
+                        healPlayer.style.opacity = 0
+
+                        setTimeout(function () {
+                            var ttme = document.querySelector(".TurnMe")
+                            ttme.style.opacity = 0
+                            $(".pTally").text(localStorage.getItem("ptally"))
+                            $(".cTally").text(localStorage.getItem("ctally"))
+
+                            var newComStat = JSON.parse(localStorage.getItem("comStat"))
+                            newComStat.hp = localStorage.getItem("corig")
+
+                            var newPlayerStat = JSON.parse(localStorage.getItem("playerStat"))
+                            newPlayerStat.hp = localStorage.getItem("porig")
+
+                            localStorage.setItem("playerStat", JSON.stringify(newPlayerStat))
+                            localStorage.setItem("comStat", JSON.stringify(newComStat))
+
+                            $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+                            $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+
+                            if ($(".rTally").text() == "ROUND 1") {
+                                $(".rTally").text("ROUND 2")
+                            }
+                            else if ($(".rTally").text() == "ROUND 2") {
+                                $(".rTally").text("ROUND 3")
+                            }
+                        }, 2000)
+
+                        setTimeout(function () {
+                            var ttme = document.querySelector(".TurnMe")
+                            ttme.style.opacity = 1
+                            var attackPlayer = document.querySelector(".attackPlayer")
+                            attackPlayer.style.display = "flex"
+                            attackPlayer.style.opacity = 1
+                            var healPlayer = document.querySelector(".healPlayer")
+                            healPlayer.style.display = "flex"
+                            healPlayer.style.opacity = 1
+
+                            $(".TurnMe").text("Player Turn")
+                        }, 4000)
+                    }
+                }
+                else if(input == "g"){
+                    window.location.href = "../TurnBasedGame/game.html"
+                }
+
+                break;
+            case 5:
+                localStorage.setItem("state",6)
+                if(input == "b"){
+                    setTimeout(function(){
+                        $(".bringDown").fadeIn();
+                    },3000)
+                }
+                else if(input == "a"){
+                    setTimeout(function(){
+                        $(".endTitle").text("YOU LOSE");
+                        $(".bringDown").fadeIn();
+                    },3000)
+                }
+                else if(input == "g"){
+                    window.location.href = "../TurnBasedGame/game.html"
+                }
+
+                break
+            case 6:
+                if(input == "g"){
+                    window.location.href = "../TurnBasedGame/game.html"
+                }
+
+                break
+        }
+    }
+    console.log(localStorage)
+    $(document).ready(function (e) {
+        $(".bringDown").hide()
+
+        $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+        var c1 = {
+            "hp": 100,
+            "attack": 50,
+            "heal": 25
+        }
+        var c2 = {
+            "hp": 100,
+            "attack": 25,
+            "heal": 50
+        }
+        var c3 = {
+            "hp": 150,
+            "attack": 25,
+            "heal": 25
+        }
+        var playerImg = document.querySelector(".playerImg")
+        playerImg.src = localStorage.getItem("char")
+
+        var enemyImg = document.querySelector(".enemyImg")
+        enemyImg.src = localStorage.getItem("enemy")
+
+        $(".playerHp").text(JSON.parse(localStorage.getItem("playerStat")).hp)
+        $(".compHp").text(JSON.parse(localStorage.getItem("comStat")).hp)
+
+
+
+        $(".attackPlayer").click(function (e) {
+            computeState(localStorage.getItem("state"), "p1")
+        })
+        $(".healPlayer").click(function (e) {
+            computeState(localStorage.getItem("state"), "p2")
+        })
+
+        $(".backBut").click(function(e){
+            computeState(localStorage.getItem("state"), "g")
+        })
+        $(".backHome").click(function(e){
+            computeState(localStorage.getItem("state"), "g")
+        })
+    })
+</script>
+
+</html>
